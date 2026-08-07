@@ -1,0 +1,39 @@
+@import "tailwindcss";
+
+.navbar {
+  background: linear-gradient(to right, white, #d6d3d1, rgb(135, 212, 233));
+}
+
+@keyframes slider {
+  0%, 12% {
+    transform: translateX(0);
+  }
+
+  16%, 28% {
+    transform: translateX(-400px);
+  }
+
+  32%, 44% {
+    transform: translateX(-800px);
+  }
+
+  48%, 60% {
+    transform: translateX(-1200px);
+  }
+
+  64%, 76% {
+    transform: translateX(-1600px);
+  }
+
+  80%, 92% {
+    transform: translateX(-2000px);
+  }
+
+  100% {
+    transform: translateX(0);
+  }
+}
+
+.animate-slider {
+  animation: slider 20s infinite ease-in-out;
+}
