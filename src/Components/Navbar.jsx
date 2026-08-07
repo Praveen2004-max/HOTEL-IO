@@ -2,9 +2,9 @@ import React from 'react'
 
 const Navbar = () => {
   return (
-    <div className='fixed w-screen px-7 py-5 font-Caveat z-50'>
+    <div className='fixed w-full px-2 py-2 font-Caveat z-50'>
         <nav className='navbar bg-white flex justify-between items-center rounded-xl px-1 py-2 shadow-md hover:shadow-xl transition duration-300'>
-            <img src='/src/assets/hotelLogo.svg' className='w-17 h-17'/>
+            <img src='./hotelLogo.svg' className='w-17 h-17'/>
 
             <div className='flex gap-5'>
                 <div className='flex text-sm gap-2 px-2 py-2'>
