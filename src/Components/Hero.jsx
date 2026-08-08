@@ -1,5 +1,6 @@
 import React from 'react'
 import { useState } from "react"
+import { PrefetchPageLinks } from 'react-router-dom';
 
 const Hotels = [
     {
@@ -26,10 +27,12 @@ const Hotels = [
 const Hero = () => {
 
   const [show, setShow] = useState(false);
+  const [adult, setAdult] = useState("");
+  const [child, setChild] = useState("");
 
   return (
   <div className="flex w-screen px-8">
-    <div className="flex gap-10 justify-center items-center absolute inset-0 mt-30 p-25 w-full">
+    <div className="flex md:flex-row gap-10 justify-center items-center absolute inset-0 mt-30 p-25 w-full">
 
       <div className="flex flex-col gap-2 mb-20">
         <p className="bg-cyan-300 text-sm rounded-xl w-54 px-3 py-0.5">
@@ -70,25 +73,62 @@ const Hero = () => {
       </div>
     </div>
 
-    <div className={show ? "flex w-full h-screen justify-center items-center" : "hidden"}>
-      <div className='h-50 w-250 bg-gray-300 text-black rounded-xl shadow-2xl'>
-        <div>
-          <h4 className='px-6 py-3 text-xl font-bold'>Check Hotel Availability</h4>
+    {/* Guests Avalibility form */}
+    <div className={show ? "fixed inset-0 flex h-screen justify-center items-center backdrop-blur-2xl z-50 w-full " : "hidden"}>
+      <div className='h-40 w-314 bg-gray-200 text-black rounded-xl shadow-2xl'>
+        <div className='flex items-center gap-1 cursor-pointer mt-4'>
+          <h5 className='px-6 py-3 text-xl font-bold'>Check Hotel Availability</h5>
+          <i onClick={()=> setShow(false)} className="bi bi-x-circle text-zinc-500 hover:text-red-400 hover:scale-110"></i>
         </div>
-        <form action="">
+        <form className=''>
           <div className='flex'>
-            <div className='flex flex-col px-6'>
-              <label className='font-bold'>Check-In: </label>
-              <input type="date" className='shadow-none w-60 px-2 py-1 rounded border'/>
+            <div className='flex flex-col px-6 border-r-2'>
+              <label className='block font-bold'>Check-In</label>
+              <input type="date" className='shadow-none w-60 px-2 py-1 rounded border' required/>
             </div>
+            <div className='flex flex-col px-6 border-r-2'>
+              <label className='block font-bold'>Check-In-Out</label>
+              <input type="date" className='shadow-none w-60 px-2 py-1 rounded border' required/>
+            </div>
+
+            <div className='flex flex-col px-6 border-r-2'>
+              <label className="block font-bold">Adult</label>
+              <select
+                value={adult}
+                onChange={(e) => setAdult(e.target.value)}
+                className="w-60 shadow-none px-2 py-1 rounded border"
+                required>
+              <option value="">Select Adult</option>
+                <option value="one">One</option>
+                <option value="two">Two</option>
+                <option value="three">Three</option>
+                <option value="other">Other</option>
+              </select>
+            </div>
+
             <div className='flex flex-col px-6'>
-              <label className='font-bold'>Check-In-Out: </label>
-              <input type="date" className='shadow-none w-60 px-2 py-1 rounded border'/>
+              <label className="block font-bold">Children</label>
+              <select
+                value={child}
+                onChange={(e) => setChild(e.target.value)}
+                className="w-60 shadow-none px-2 py-1 rounded border"
+                required>
+              <option value="">Select Child</option>
+                <option value="one">One</option>
+                <option value="two">Two</option>
+                <option value="three">Three</option>
+                <option value="other">Other</option>
+              </select>
+            </div>
+
+            <div className='bg-teal-400 px-3 rounded-xl cursor-pointer hover:scale-95'>
+              <button className='mt-3.5 font-semibold cursor-pointer' type='submit'>Submit</button>
             </div>
           </div>
         </form>
       </div>
     </div>
+
   </div>
 );
 }
