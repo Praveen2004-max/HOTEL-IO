@@ -31,7 +31,8 @@ const Hero = () => {
   const [child, setChild] = useState("");
 
   return (
-  <div className="flex w-screen px-8">
+  <div className="flex h-[100vh] w-screen px-8">
+    <img className='w-full object-cover blur-sm' src="./Images/HomeImage.jpg" alt="hero-image" />
     <div className="flex md:flex-row gap-10 justify-center items-center absolute inset-0 mt-30 p-25 w-full">
 
       <div className="flex flex-col gap-2 mb-20">
@@ -39,7 +40,7 @@ const Hero = () => {
           The Ultimate Hotel Experience
         </p>
 
-        <h2 className="text-5xl font-bold w-150 bg-gradient-to-r from-blue-500 via-cyan-500 to-pink-500 bg-clip-text text-transparent">
+        <h2 className="hero text-5xl font-bold w-150 bg-clip-text text-transparent">
           Discover Your Perfect <br />
           Gateway Destination
         </h2>
@@ -59,14 +60,14 @@ const Hero = () => {
         </div>
       </div>
 
-      <div className="w-100 h-100 rounded-xl overflow-hidden shadow-[0_10px_30px_rgba(0,0,0,0.3)] hover:scale-110 transition duration-300">
+      <div className="w-100 h-100 rounded-xl overflow-hidden shadow-[0_10px_30px_rgba(0,0,0,0.3)] ">
         <div className="flex animate-slider h-full">
           {[...Hotels, ...Hotels].map((item, index) => (
             <img
               key={index}
               src={item.image}
               alt="Hotel"
-              className="w-full h-full flex-shrink-0"
+              className="w-full h-full flex shrink-0 hover:scale-110 transition duration-300"
             />
           ))}
         </div>

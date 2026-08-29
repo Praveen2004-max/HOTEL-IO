@@ -1,32 +1,41 @@
 import React, { useState } from "react";
 import Login from "./Login";
 import Register from "./Register";
+import { Link } from "react-router-dom";
 
 const Navbar = () => {
 
   const [login, setLogin] = useState(false);
   const [register, setRegister] = useState(false);
 
-  const [user, setUser] = useState(
-    JSON.parse(localStorage.getItem("hotelioUser"))
-  );
+  const [user, setUser] = useState(() => {
+
+    const savedUser = localStorage.getItem("loggedInUser");
+
+    return savedUser
+      ? JSON.parse(savedUser)
+      : null;
+  });
 
   const [showMenu, setShowMenu] = useState(false);
 
   // Logout
   const logout = () => {
-    localStorage.removeItem("hotelioUser");
+
+    localStorage.removeItem("token");
+    localStorage.removeItem("loggedInUser");
+
     setUser(null);
     setShowMenu(false);
   };
 
-  // Login open
+  // Open Login
   const openLogin = () => {
     setRegister(false);
     setLogin(true);
   };
 
-  // Register open
+  // Open Register
   const openRegister = () => {
     setLogin(false);
     setRegister(true);
@@ -34,63 +43,54 @@ const Navbar = () => {
 
   return (
     <div className="fixed z-50 w-full">
-      {/* ================= NAVBAR ================= */}
-
-      <nav className="w-full flex items-center justify-between px-8 py-3 bg-transparent shadow-2xs hover:shadow-xl">
+      <nav className="w-full flex items-center justify-between px-8 py-3 bg-white rounded-b-3xl shadow-xl hover:shadow-lg">
 
         {/* Logo */}
         <div>
-          <img className="h-13 w-13 rounded-full" src="./hotelLogo.svg" alt="Hotellogo" />
+          <Link to="/">
+            <img
+            className="h-13 w-13 rounded-full"
+            src="./hotelLogo.svg"
+            alt="Hotel Logo"
+           />
+          </Link>
         </div>
-
         {/* Navigation */}
         <div className="flex gap-5 items-center">
 
           {/* Links */}
           <div className="flex text-sm gap-5 px-2 py-2">
 
-            <a
-              className="hover:text-emerald-400"
-              href="#"
-            >
+            <Link to="/" className="hover:text-emerald-400">
               Home
-            </a>
+            </Link>
 
-            <a
-              className="hover:text-emerald-400"
-              href="#"
-            >
-              Rooms
-            </a>
+            <Link to="/hotels" className="hover:text-emerald-400" >
+              Hotels
+            </Link>
 
-            <a
-              className="hover:text-emerald-400"
-              href="#"
-            >
+            <Link className="hover:text-emerald-400">
               Experience
-            </a>
+            </Link>
 
-            <a
-              className="hover:text-emerald-400"
-              href="#"
-            >
+            <Link className="hover:text-emerald-400">
               About
-            </a>
+            </Link>
 
           </div>
 
           {/* Dashboard */}
-          <button
-            className="text-sm text-black hover:text-zinc-800 
-            bg-transparent hover:bg-emerald-600 
-            border px-3 py-2 rounded-xl 
-            cursor-pointer hover:scale-95 duration-500"
-          >
-            Dashboard
-          </button>
+          {user?.role === "admin" && (
+            <Link to="/dashboard"
+              className="text-sm text-white hover:text-gray-200
+             bg-blue-500 hover:bg-blue-600
+              border px-3 py-2.5 rounded-xl
+              cursor-pointer hover:scale-95 duration-500"
+            >Dashboard
+            </Link>
+          )}
 
-          {/* ================= USER ================= */}
-
+          {/* USER LOGGED IN */}
           {user ? (
 
             <div className="relative">
@@ -99,12 +99,12 @@ const Navbar = () => {
               <button
                 type="button"
                 onClick={() => setShowMenu(!showMenu)}
-                className="w-11 h-11 rounded-full overflow-hidden 
+                className="w-11 h-11 rounded-full overflow-hidden
                 border-2 border-emerald-500 cursor-pointer"
               >
 
                 <img
-                  src={user.image}
+                  src={`http://localhost:5000${user.image}`}
                   alt="User"
                   className="w-full h-full object-cover"
                 />
@@ -115,7 +115,7 @@ const Navbar = () => {
               {showMenu && (
 
                 <div
-                  className="absolute right-0 top-14 w-64 
+                  className="absolute right-0 top-14 w-64
                   bg-white shadow-xl rounded-xl p-4 z-[1000]"
                 >
 
@@ -123,7 +123,7 @@ const Navbar = () => {
                   <div className="flex items-center gap-3 border-b pb-3">
 
                     <img
-                      src={user.image}
+                      src={`http://localhost:5000${user.image}`}
                       alt="Profile"
                       className="w-12 h-12 rounded-full object-cover"
                     />
@@ -142,20 +142,18 @@ const Navbar = () => {
 
                   </div>
 
-                  {/* Profile */}
+                  {/* My Profile */}
                   <button
                     type="button"
-                    className="block w-full text-left py-3 
-                    hover:text-emerald-600"
+                    className="block w-full text-left py-3 hover:text-emerald-600"
                   >
                     👤 My Profile
                   </button>
 
-                  {/* Bookings */}
+                  {/* My Bookings */}
                   <button
                     type="button"
-                    className="block w-full text-left py-3 
-                    hover:text-emerald-600"
+                    className="block w-full text-left py-3 hover:text-emerald-600"
                   >
                     📋 My Bookings
                   </button>
@@ -164,7 +162,7 @@ const Navbar = () => {
                   <button
                     type="button"
                     onClick={logout}
-                    className="block w-full text-left py-3 
+                    className="block w-full text-left py-3
                     text-red-500 hover:text-red-700"
                   >
                     🚪 Logout
@@ -178,7 +176,7 @@ const Navbar = () => {
 
           ) : (
 
-            /* ================= LOGIN / REGISTER ================= */
+            /* NOT LOGGED IN */
 
             <div className="flex gap-3">
 
@@ -186,9 +184,9 @@ const Navbar = () => {
               <button
                 type="button"
                 onClick={openLogin}
-                className="bg-transparent 
-                hover:bg-cyan-600 hover:text-zinc-900 
-                border text-black rounded-xl px-3 py-2 
+                className="bg-transparent
+                hover:bg-cyan-600 hover:text-zinc-900
+                border text-black rounded-xl px-3 py-2
                 cursor-pointer hover:scale-95 duration-500"
               >
                 Login
@@ -198,9 +196,9 @@ const Navbar = () => {
               <button
                 type="button"
                 onClick={openRegister}
-                className="bg-transparent 
-                hover:bg-cyan-600 hover:text-zinc-900 
-                border text-black rounded-xl px-3 py-2 
+                className="bg-transparent
+                hover:bg-cyan-600 hover:text-zinc-900
+                border text-black rounded-xl px-3 py-2
                 cursor-pointer hover:scale-95 duration-500"
               >
                 Register
@@ -214,8 +212,7 @@ const Navbar = () => {
 
       </nav>
 
-      {/* ================= LOGIN POPUP ================= */}
-
+      {/* Login Popup */}
       {login && (
         <Login
           login={login}
@@ -225,8 +222,7 @@ const Navbar = () => {
         />
       )}
 
-      {/* ================= REGISTER POPUP ================= */}
-
+      {/* Register Popup */}
       {register && (
         <Register
           register={register}

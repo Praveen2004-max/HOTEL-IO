@@ -1,42 +1,74 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 const Login = (props) => {
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const navigate = useNavigate();
 
-  const handleLogin = (e) => {
+  const handleLogin = async (e) => {
 
     e.preventDefault();
 
-    // LocalStorage se user lena
-    const user = JSON.parse(
-      localStorage.getItem("hotelioUser")
-    );
+    try {
 
-    // User nahi mila
-    if (!user) {
-      alert("Please register first");
-      return;
-    }
+      const response = await fetch(
+        "http://localhost:5000/api/users/login",
+        {
+          method: "POST",
 
-    // Email + Password check
-    if (
-      email === user.email &&
-      password === user.password
-    ) {
+          headers: {
+            "Content-Type": "application/json",
+          },
+
+          body: JSON.stringify({
+            email,
+            password,
+          }),
+        }
+      );
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        alert(data.message || "Login failed");
+        return;
+      }
+
+      // User save
+      localStorage.setItem(
+        "loggedInUser",
+        JSON.stringify(data.user)
+      );
+
+      if(data.user.role === "admin") {
+        navigate("/dashboard");
+      } else {
+        navigate("/");
+      }
+
+      // Token save
+      if (data.token) {
+        localStorage.setItem(
+          "token",
+          data.token
+        );
+      }
+
+      // Navbar user update
+      props.setUser(data.user);
 
       alert("Login successful!");
 
-      // Navbar ko user data dena
-      props.setUser(user);
-
-      // Login popup close
+      // Login close
       props.setLogin(false);
 
-    } else {
+    } catch (error) {
 
-      alert("Invalid email or password");
+      console.log("Login Error:", error);
+
+      alert("Backend server se connection nahi ho raha");
 
     }
   };

@@ -1,7 +1,22 @@
 @import "tailwindcss";
+@import url('https://fonts.googleapis.com/css2?family=Ubuntu:ital,wght@0,300;0,400;0,500;0,700;1,300;1,400;1,500;1,700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Share+Tech&family=Ubuntu:ital,wght@0,300;0,400;0,500;0,700;1,300;1,400;1,500;1,700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Lobster+Two:ital,wght@0,400;0,700;1,400;1,700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Sekuya&display=swap');
+
+body{
+  font-family: 'Share+Tech&family=Ubuntu', sans-serif;
+}
 
 .navbar {
   background: linear-gradient(to right, white, #d6d3d1, rgb(135, 212, 233));
+}
+
+.hero {
+  background: linear-gradient(to right, rgb(71, 71, 239), cyan, pink);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
 }
 
 @keyframes slider {
@@ -37,3 +52,13 @@
 .animate-slider {
   animation: slider 20s infinite ease-in-out;
 }
+
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+

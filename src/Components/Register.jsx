@@ -12,11 +12,11 @@ const Register = (props) => {
   const [confirmPass, setConfirmPass] = useState("");
   const [image, setImage] = useState(null);
 
-  const handleRegister = (e) => {
+  const handleRegister = async (e) => {
 
     e.preventDefault();
 
-    // Check all fields
+    // Check fields
     if (
       !fullName ||
       !userName ||
@@ -37,27 +37,32 @@ const Register = (props) => {
       return;
     }
 
-    // Image ko Base64 me convert karna
-    const reader = new FileReader();
+    try {
 
-    reader.onloadend = () => {
+      const formData = new FormData();
 
-      const user = {
-        fullName: fullName,
-        userName: userName,
-        email: email,
-        phone: phone,
-        password: password,
-        confirmPass: confirmPass,
-        gender: gender,
-        image: reader.result
-      };
+      formData.append("fullName", fullName);
+      formData.append("userName", userName);
+      formData.append("email", email);
+      formData.append("phone", phone);
+      formData.append("password", password);
+      formData.append("gender", gender);
+      formData.append("image", image);
 
-      // LocalStorage me user save
-      localStorage.setItem(
-        "hotelioUser",
-        JSON.stringify(user)
+      const response = await fetch(
+        "http://localhost:5000/api/users/register",
+        {
+          method: "POST",
+          body: formData,
+        }
       );
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        alert(data.message || "Registration failed");
+        return;
+      }
 
       alert("Registration successful!");
 
@@ -66,9 +71,14 @@ const Register = (props) => {
 
       // Login open
       props.setLogin(true);
-    };
 
-    reader.readAsDataURL(image);
+    } catch (error) {
+
+      console.log("Register Error:", error);
+
+      alert("Not connected to Backend Server");
+
+    }
   };
 
   return (
@@ -111,6 +121,7 @@ const Register = (props) => {
               <input
                 type="text"
                 placeholder="Enter Your Name"
+                value={fullName}
                 onChange={(e) => setFullName(e.target.value)}
                 className="px-3 py-2 w-full rounded border hover:bg-zinc-200"
                 required
@@ -127,6 +138,7 @@ const Register = (props) => {
               <input
                 type="text"
                 placeholder="Enter Your Username"
+                value={userName}
                 onChange={(e) => setUserName(e.target.value)}
                 className="px-3 py-2 w-full rounded border hover:bg-zinc-200"
                 required
@@ -148,6 +160,7 @@ const Register = (props) => {
               <input
                 type="email"
                 placeholder="Enter Your Email"
+                value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 className="px-3 py-2 w-full rounded border hover:bg-zinc-200"
                 required
@@ -164,6 +177,7 @@ const Register = (props) => {
               <input
                 type="text"
                 placeholder="Enter Your Phone"
+                value={phone}
                 onChange={(e) => setPhone(e.target.value)}
                 className="px-3 py-2 w-full rounded border hover:bg-zinc-200"
                 required
@@ -173,7 +187,7 @@ const Register = (props) => {
 
           </div>
 
-          {/* Password + Confirm Password */}
+          {/* Password */}
           <div className="flex justify-between gap-5 mt-4">
 
             <div className="flex flex-col w-full">
@@ -185,6 +199,7 @@ const Register = (props) => {
               <input
                 type="password"
                 placeholder="Enter Password"
+                value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 className="px-3 py-2 w-full rounded border hover:bg-zinc-200"
                 required
@@ -201,6 +216,7 @@ const Register = (props) => {
               <input
                 type="password"
                 placeholder="Confirm Your Password"
+                value={confirmPass}
                 onChange={(e) => setConfirmPass(e.target.value)}
                 className="px-3 py-2 w-full rounded border hover:bg-zinc-200"
                 required
@@ -210,7 +226,7 @@ const Register = (props) => {
 
           </div>
 
-          {/* Profile Image */}
+          {/* Image */}
           <div className="mt-4">
 
             <h2 className="text-zinc-500 text-xl mb-2">
@@ -238,7 +254,6 @@ const Register = (props) => {
             <div className="flex gap-5">
 
               <label className="flex gap-2 text-zinc-500 text-lg">
-
                 <input
                   type="radio"
                   name="gender"
@@ -246,13 +261,10 @@ const Register = (props) => {
                   checked={gender === "Male"}
                   onChange={(e) => setGender(e.target.value)}
                 />
-
                 Male
-
               </label>
 
               <label className="flex gap-2 text-zinc-500 text-lg">
-
                 <input
                   type="radio"
                   name="gender"
@@ -260,13 +272,10 @@ const Register = (props) => {
                   checked={gender === "Female"}
                   onChange={(e) => setGender(e.target.value)}
                 />
-
                 Female
-
               </label>
 
               <label className="flex gap-2 text-zinc-500 text-lg">
-
                 <input
                   type="radio"
                   name="gender"
@@ -274,16 +283,14 @@ const Register = (props) => {
                   checked={gender === "Other"}
                   onChange={(e) => setGender(e.target.value)}
                 />
-
                 Other
-
               </label>
 
             </div>
 
           </div>
 
-          {/* Register Button */}
+          {/* Register */}
           <button
             type="submit"
             className="w-full font-semibold text-zinc-700 px-3 py-2 rounded bg-transparent border hover:bg-emerald-400 mt-5 cursor-pointer"

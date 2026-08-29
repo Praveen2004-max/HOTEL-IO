@@ -45,7 +45,7 @@ const Testimonials = () => {
   const current = testimonials[active];
 
   return (
-    <section className="h-screen bg-white flex flex-col justify-center items-center px-4 py-10">
+    <section className="h-[80vh] bg-white flex flex-col justify-center items-center px-4 py-10">
         <div className="w-full max-w-5xl mt-22">
             <div className="flex flex-col justify-center items-center mb-18">
                 <span className="inline-block border border-zinc-400 text-[10x] px-3 py-1 rounded">Testimonials</span>
